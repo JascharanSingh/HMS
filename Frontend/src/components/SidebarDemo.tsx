@@ -1,4 +1,3 @@
-
 import React, { useState } from "react";
 // Update the import path below to the correct relative path if the Sidebar components exist locally.
 // For example, if they are in 'src/components/ui/sidebar.tsx', use:
@@ -49,8 +48,7 @@ export default function SidebarDemo() {
   return (
     <div
       className={cn(
-        "mx-auto flex w-full max-w-7xl flex-1 flex-col overflow-hidden rounded-md border border-neutral-200 bg-gray-100 md:flex-row dark:border-neutral-700 dark:bg-neutral-800",
-        "h-[60vh]", // for your use case, use `h-screen` instead of `h-[60vh]`
+        "flex w-screen h-screen md:flex-row flex-col overflow-hidden"
       )}
     >
       <Sidebar open={open} setOpen={setOpen}>
@@ -66,11 +64,11 @@ export default function SidebarDemo() {
           <div>
             <SidebarLink
               link={{
-                label: "Manu Arora",
+                label: "Debug Dragons",
                 href: "#",
                 icon: (
                   <img
-                    src="https://assets.aceternity.com/manu.png"
+                    src="/dragons.JPG"
                     className="h-7 w-7 shrink-0 rounded-full"
                     width={50}
                     height={50}
