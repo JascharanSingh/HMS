@@ -2,6 +2,7 @@ import React, { useState } from "react";
 // Update the import path below to the correct relative path if the Sidebar components exist locally.
 // For example, if they are in 'src/components/ui/sidebar.tsx', use:
 import { Sidebar, SidebarBody, SidebarLink } from "./ui/Sidebar";
+import { Navbar } from "./Navbar";
 // Or, if you use path aliases, ensure your tsconfig.json has the correct 'paths' mapping for '@'.
 import {
   IconArrowLeft,
@@ -46,41 +47,40 @@ export default function SidebarDemo() {
   ];
   const [open, setOpen] = useState(false);
   return (
-    <div
-      className={cn(
-        "flex w-screen h-screen md:flex-row flex-col overflow-hidden"
-      )}
-    >
-      <Sidebar open={open} setOpen={setOpen}>
-        <SidebarBody className="justify-between gap-10">
-          <div className="flex flex-1 flex-col overflow-x-hidden overflow-y-auto">
-            {open ? <Logo /> : <LogoIcon />}
-            <div className="mt-8 flex flex-col gap-2">
-              {links.map((link, idx) => (
-                <SidebarLink key={idx} link={link} />
-              ))}
+    <div className="w-screen h-screen flex flex-col">
+      <Navbar />
+      <div className="flex flex-1 overflow-hidden md:flex-row flex-col">
+        <Sidebar open={open} setOpen={setOpen}>
+          <SidebarBody className="justify-between gap-10">
+            <div className="flex flex-1 flex-col overflow-x-hidden overflow-y-auto">
+              {open ? <Logo /> : <LogoIcon />}
+              <div className="mt-8 flex flex-col gap-2">
+                {links.map((link, idx) => (
+                  <SidebarLink key={idx} link={link} />
+                ))}
+              </div>
             </div>
-          </div>
-          <div>
-            <SidebarLink
-              link={{
-                label: "Debug Dragons",
-                href: "#",
-                icon: (
-                  <img
-                    src="/dragons.JPG"
-                    className="h-7 w-7 shrink-0 rounded-full"
-                    width={50}
-                    height={50}
-                    alt="Avatar"
-                  />
-                ),
-              }}
-            />
-          </div>
-        </SidebarBody>
-      </Sidebar>
-      <Dashboard />
+            <div>
+              <SidebarLink
+                link={{
+                  label: "Debug Dragons",
+                  href: "#",
+                  icon: (
+                    <img
+                      src="/dragons.JPG"
+                      className="h-7 w-7 shrink-0 rounded-full"
+                      width={50}
+                      height={50}
+                      alt="Avatar"
+                    />
+                  ),
+                }}
+              />
+            </div>
+          </SidebarBody>
+        </Sidebar>
+        <Dashboard />
+      </div>
     </div>
   );
 }
@@ -96,7 +96,7 @@ export const Logo = () => {
         animate={{ opacity: 1 }}
         className="font-medium whitespace-pre text-black dark:text-white"
       >
-        Acet Labs
+        HMS Labs
       </motion.span>
     </a>
   );
