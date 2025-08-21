@@ -1,188 +1,80 @@
+import React from 'react';
+import { motion, AnimatePresence } from 'framer-motion';
+import { Link, useLocation } from 'react-router-dom';
+import clsx from 'clsx';
+import { IconChevronLeft } from '@tabler/icons-react';
 
-import { cn } from "../../lib/utils";
-import React, { useState, createContext, useContext } from "react";
-import { AnimatePresence, motion } from "motion/react";
-import { IconMenu2, IconX } from "@tabler/icons-react";
-
-interface Links {
-  label: string;
-  href: string;
-  icon: React.JSX.Element | React.ReactNode;
-}
-
-interface SidebarContextProps {
+type SidebarProps = {
   open: boolean;
-  setOpen: React.Dispatch<React.SetStateAction<boolean>>;
-  animate: boolean;
-}
-
-const SidebarContext = createContext<SidebarContextProps | undefined>(
-  undefined
-);
-
-export const useSidebar = () => {
-  const context = useContext(SidebarContext);
-  if (!context) {
-    throw new Error("useSidebar must be used within a SidebarProvider");
-  }
-  return context;
-};
-
-export const SidebarProvider = ({
-  children,
-  open: openProp,
-  setOpen: setOpenProp,
-  animate = true,
-}: {
+  setOpen: (open: boolean) => void;
   children: React.ReactNode;
-  open?: boolean;
-  setOpen?: React.Dispatch<React.SetStateAction<boolean>>;
-  animate?: boolean;
-}) => {
-  const [openState, setOpenState] = useState(false);
+};
 
-  const open = openProp !== undefined ? openProp : openState;
-  const setOpen = setOpenProp !== undefined ? setOpenProp : setOpenState;
-
+export const Sidebar = ({ open, setOpen, children }: SidebarProps) => {
   return (
-    <SidebarContext.Provider value={{ open, setOpen, animate: animate }}>
-      {children}
-    </SidebarContext.Provider>
+    <>
+      <AnimatePresence>
+        {open && (
+          <motion.div
+            initial={{ x: '-100%' }}
+            animate={{ x: 0 }}
+            exit={{ x: '-100%' }}
+            transition={{ duration: 0.3, ease: 'easeInOut' }}
+            className="fixed left-0 top-0 z-40 h-screen w-64 bg-white shadow-lg dark:bg-neutral-900 md:relative md:translate-x-0"
+          >
+            {children}
+          </motion.div>
+        )}
+      </AnimatePresence>
+    <div className="hidden md:flex items-center justify-center ml-1">
+  <button
+    onClick={() => setOpen(!open)}
+    className="p-1.5 bg-gray-100 dark:bg-neutral-800 rounded-full border dark:border-neutral-700 text-gray-600 dark:text-gray-300 hover:bg-gray-200 dark:hover:bg-neutral-700 transition-colors"
+  >
+    <motion.div animate={{ rotate: open ? 0 : 180 }}>
+      <IconChevronLeft size={16} />
+    </motion.div>
+  </button>
+</div>
+    </>
   );
 };
 
-export const Sidebar = ({
-  children,
-  open,
-  setOpen,
-  animate,
-}: {
+type SidebarBodyProps = {
   children: React.ReactNode;
-  open?: boolean;
-  setOpen?: React.Dispatch<React.SetStateAction<boolean>>;
-  animate?: boolean;
-}) => {
-  return (
-    <SidebarProvider open={open} setOpen={setOpen} animate={animate}>
-      {children}
-    </SidebarProvider>
-  );
-};
-
-export const SidebarBody = (props: React.ComponentProps<typeof motion.div>) => {
-  return (
-    <>
-      <DesktopSidebar {...props} />
-      <MobileSidebar {...(props as React.ComponentProps<"div">)} />
-    </>
-  );
-};
-
-export const DesktopSidebar = ({
-  className,
-  children,
-  ...props
-}: React.ComponentProps<typeof motion.div>) => {
-  const { open, setOpen, animate } = useSidebar();
-  return (
-    <>
-      <motion.div
-        className={cn(
-          "h-full px-4 py-4 hidden  md:flex md:flex-col bg-neutral-100 dark:bg-neutral-800 w-[300px] shrink-0",
-          className
-        )}
-        animate={{
-          width: animate ? (open ? "300px" : "60px") : "300px",
-        }}
-        onMouseEnter={() => setOpen(true)}
-        onMouseLeave={() => setOpen(false)}
-        {...props}
-      >
-        {children}
-      </motion.div>
-    </>
-  );
-};
-
-export const MobileSidebar = ({
-  className,
-  children,
-  ...props
-}: React.ComponentProps<"div">) => {
-  const { open, setOpen } = useSidebar();
-  return (
-    <>
-      <div
-        className={cn(
-          "h-10 px-4 py-4 flex flex-row md:hidden  items-center justify-between bg-neutral-100 dark:bg-neutral-800 w-full"
-        )}
-        {...props}
-      >
-        <div className="flex justify-end z-20 w-full">
-          <IconMenu2
-            className="text-neutral-800 dark:text-neutral-200"
-            onClick={() => setOpen(!open)}
-          />
-        </div>
-        <AnimatePresence>
-          {open && (
-            <motion.div
-              initial={{ x: "-100%", opacity: 0 }}
-              animate={{ x: 0, opacity: 1 }}
-              exit={{ x: "-100%", opacity: 0 }}
-              transition={{
-                duration: 0.3,
-                ease: "easeInOut",
-              }}
-              className={cn(
-                "fixed h-full w-full inset-0 bg-white dark:bg-neutral-900 p-10 z-[100] flex flex-col justify-between",
-                className
-              )}
-            >
-              <div
-                className="absolute right-10 top-10 z-50 text-neutral-800 dark:text-neutral-200"
-                onClick={() => setOpen(!open)}
-              >
-                <IconX />
-              </div>
-              {children}
-            </motion.div>
-          )}
-        </AnimatePresence>
-      </div>
-    </>
-  );
-};
-
-export const SidebarLink = ({
-  link,
-  className,
-  ...props
-}: {
-  link: Links;
   className?: string;
-}) => {
-  const { open, animate } = useSidebar();
+};
+
+export const SidebarBody = ({ children, className }: SidebarBodyProps) => {
   return (
-    <a
-      href={link.href}
-      className={cn(
-        "flex items-center justify-start gap-2  group/sidebar py-2",
-        className
+    <div className={clsx("flex h-full flex-col p-4", className)}>
+      {children}
+    </div>
+  );
+};
+
+type SidebarLinkProps = {
+  link: {
+    href: string;
+    icon?: React.ReactNode;
+    label: string;
+  };
+};
+
+export const SidebarLink = ({ link }: SidebarLinkProps) => {
+  const location = useLocation();
+  const isActive = location.pathname === link.href;
+
+  return (
+    <Link
+      to={link.href}
+      className={clsx(
+        "flex items-center justify-start gap-3 rounded-lg px-3 py-2 text-neutral-600 transition-colors duration-200 hover:bg-teal-50 hover:text-teal-600 dark:text-neutral-300 dark:hover:bg-teal-900/50 dark:hover:text-teal-400",
+        isActive && "bg-teal-100 font-semibold text-teal-700 dark:bg-teal-900/60 dark:text-teal-300"
       )}
-      {...props}
     >
       {link.icon}
-
-      <motion.span
-        animate={{
-          display: animate ? (open ? "inline-block" : "none") : "inline-block",
-          opacity: animate ? (open ? 1 : 0) : 1,
-        }}
-        className="text-neutral-700 dark:text-neutral-200 text-sm group-hover/sidebar:translate-x-1 transition duration-150 whitespace-pre inline-block !p-0 !m-0"
-      >
-        {link.label}
-      </motion.span>
-    </a>
+      <span className="text-sm">{link.label}</span>
+    </Link>
   );
 };

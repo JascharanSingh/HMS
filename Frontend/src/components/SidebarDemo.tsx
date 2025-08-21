@@ -11,8 +11,7 @@ import {
   IconUserBolt,
 } from "@tabler/icons-react";
 import { motion } from "motion/react";
-// Update the path below if your utils file is elsewhere
-import { cn } from "../lib/utils";
+
 
 export default function SidebarDemo() {
   const links = [

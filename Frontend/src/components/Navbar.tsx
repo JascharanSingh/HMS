@@ -4,15 +4,10 @@ import React from 'react';
 import { motion } from 'framer-motion';
 import clsx from 'clsx';
 import { Search, Bell, Settings, ChevronDown } from 'lucide-react';
+import { Logo, LogoIcon } from '../components/Logo';
 
 // You can replace this with your actual logo SVG or component
-const Logo = () => (
-  <svg width="32" height="32" viewBox="0 0 32 32" fill="none" xmlns="http://www.w3.org/2000/svg">
-    <path d="M16 0L27.1962 8V24L16 32L4.80385 24V8L16 0Z" fill="#14B8A6"/>
-    <path d="M16 11.2L22.3923 15.2V23.2L16 27.2L9.6077 23.2V15.2L16 11.2Z" fill="white" fillOpacity="0.5"/>
-    <path d="M16 4.8L25.5962 11.2V20.8L16 27.2L6.40385 20.8V11.2L16 4.8Z" fill="white" fillOpacity="0.8"/>
-  </svg>
-);
+
 
 
 export const Navbar = () => {
@@ -33,6 +28,7 @@ export const Navbar = () => {
     'focus:ring-offset-2',
     'focus:ring-teal-500'
   );
+   
 
   return (
     <motion.nav
@@ -45,10 +41,9 @@ export const Navbar = () => {
         
         {/* Left Section: Logo and Brand */}
         <div className="flex items-center space-x-3">
-          <Logo />
-          <span className="text-2xl font-bold text-gray-800 hidden md:block">
-            Prvaha
-          </span>
+           <div className="mt-2 px-2">
+                <Logo/>
+              </div>
         </div>
 
         {/* Middle Section: Search Bar */}
@@ -80,7 +75,7 @@ export const Navbar = () => {
           <div className="flex items-center space-x-2 cursor-pointer p-1 rounded-lg hover:bg-gray-100 transition-colors">
             <div className="relative">
               <img
-                src="https://i.pravatar.cc/150?u=a042581f4e29026704d" // Placeholder image
+                src="/dragons.JPG" // Placeholder image
                 alt="User profile"
                 className="h-10 w-10 rounded-full object-cover border-2 border-transparent"
               />
