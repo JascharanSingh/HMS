@@ -4,7 +4,7 @@
   "type": "module",
   "main": "graphql/server.js",
   "scripts": {
-    "dev": "node graphql/server.js",
+    "dev": "nodemon graphql/server.js",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "keywords": [],
@@ -17,6 +17,7 @@
     "dotenv": "^17.2.2",
     "express": "^4.21.2",
     "graphql": "^16.11.0",
+    "nodemon": "^3.1.10",
     "pg": "^8.16.3",
     "postgres": "^3.4.7"
   }
