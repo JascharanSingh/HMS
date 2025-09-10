@@ -12,17 +12,18 @@ export const resolvers = {
       }
     },
   },
-
   Mutation: {
-    updatePatient: async (_, { id, medical_history }) => {
+    updatePatientMedicalHistory: async (_, { id, medical_history }) => {
       try {
         const result = await sql`
           UPDATE patients
-          SET medical_history = ${sql.json(medical_history)},
-              updated_at = NOW()
+          SET medical_history = ${medical_history}::jsonb
           WHERE id = ${id}
           RETURNING *;
         `;
+        if (result.length === 0) {
+          throw new Error(`Patient with id ${id} not found`);
+        }
         return result[0];
       } catch (error) {
         console.error("Error updating patient:", error);
@@ -32,9 +33,7 @@ export const resolvers = {
   },
 
   Patient: {
-    medical_history: (parent) => {
-      if (!parent.medical_history) return null;
-      return parent.medical_history;
-    },
+    // ensures Postgres JSONB maps correctly into GraphQL JSON scalar
+    medical_history: (parent) => parent.medical_history,
   },
 };

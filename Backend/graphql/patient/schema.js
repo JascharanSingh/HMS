@@ -18,6 +18,6 @@ export const typeDefs = `#graphql
   }
 
   type Mutation {
-    updatePatient(id: Int!, medical_history: JSON!): Patient
+    updatePatientMedicalHistory(id: Int!, medical_history: JSON!): Patient
   }
 `;

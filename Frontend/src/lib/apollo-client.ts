@@ -1,16 +1,9 @@
-// src/lib/apollo-client.ts
-import { HttpLink } from "@apollo/client";
-import {
-  ApolloClient,
-  InMemoryCache,
-  registerApolloClient,
-} from "@apollo/client-integration-nextjs";
+import { ApolloClient, InMemoryCache, HttpLink } from "@apollo/client";
 
-export const { getClient, query, PreloadQuery } = registerApolloClient(() => {
-  return new ApolloClient({
-    cache: new InMemoryCache(),
-    link: new HttpLink({
-      uri: "http://localhost:4000/graphql",
-    }),
-  });
+export const client = new ApolloClient({
+  link: new HttpLink({
+    uri: "http://localhost:4000/graphql", // 👈 change for production
+    credentials: "include", // if you use cookies
+  }),
+  cache: new InMemoryCache(),
 });
